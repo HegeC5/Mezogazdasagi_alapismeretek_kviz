@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Mezőgazdasági Gépek Kvíz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .question {
+      margin-bottom: 30px;
+    }
+    .options {
+      list-style-type: none;
+      padding: 0;
+    }
+    .options li {
+      margin-bottom: 10px;
+    }
+    .feedback {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 15px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Mezőgazdasági Gépek Kvíz</h1>
+    <div id="quiz"></div>
+    <div class="button-group">
+      <button onclick="checkAnswers()">Ellenőrzés</button>
+      <button onclick="loadQuiz()">Új kérdések</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        question: "Milyen típusú mezőgazdasági gép alkalmas talajforgatásra?",
+        options: ["Permetezőgép", "Eke", "Kombájn"],
+        answer: 1
+      },
+      {
+        question: "Mi a GPS szerepe a precíziós mezőgazdaságban?",
+        options: ["Navigáció a földeken belül", "Időjárás-jelentés küldése", "Gépkarbantartás elvégzése"],
+        answer: 0
+      },
+      {
+        question: "Melyik géptípus használható a termény betakarítására?",
+        options: ["Vetőgép", "Kombájn", "Permetezőgép"],
+        answer: 1
+      },
+      {
+        question: "Melyik szoftver típust használják adatelemzésre a precíziós mezőgazdaságban?",
+        options: ["Táblázatkezelő", "Játékprogram", "Szövegszerkesztő"],
+        answer: 0
+      },
+      {
+        question: "Mi a drónok egyik hasznos felhasználási területe a mezőgazdaságban?",
+        options: ["Termények eladása", "Növénymegfigyelés", "Gépkarbantartás"],
+        answer: 1
+      },
+      {
+        question: "Melyik gép használható vetésre?",
+        options: ["Kombájn", "Eke", "Vetőgép"],
+        answer: 2
+      },
+      {
+        question: "Melyik mezőgazdasági gép használatos permetezésre?",
+        options: ["Permetezőgép", "Traktor", "Kombájn"],
+        answer: 0
+      },
+      {
+        question: "Mi a traktor legfőbb funkciója?",
+        options: ["Szántás és vontatás", "Betakarítás", "Növényvédelem"],
+        answer: 0
+      },
+      {
+        question: "Mit jelent az automata kormányzás mezőgazdasági gépeken?",
+        options: ["Önműködő vezetés GPS alapján", "Kézi irányítás", "Távirányítóval működtetett rendszer"],
+        answer: 0
+      },
+      {
+        question: "Melyik géptípus NEM jellemző a növénytermesztésben?",
+        options: ["Kombájn", "Szőlőprés", "Vetőgép"],
+        answer: 1
+      }
+    ];
+
+    let selectedQuestions = [];
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function loadQuiz() {
+      shuffle(questions);
+      selectedQuestions = questions.slice(0, 5); // 5 random kérdés
+      const quizDiv = document.getElementById("quiz");
+      quizDiv.innerHTML = "";
+
+      selectedQuestions.forEach((q, index) => {
+        const questionHTML = `
+          <div class="question" id="question${index}">
+            <p><strong>${index + 1}. kérdés:</strong> ${q.question}</p>
+            <ul class="options">
+              ${q.options.map((opt, i) => `
+                <li><input type="radio" name="q${index}" value="${i}"> ${String.fromCharCode(97 + i)}) ${opt}</li>
+              `).join("")}
+            </ul>
+            <p class="feedback" id="feedback${index}"></p>
+          </div>
+        `;
+        quizDiv.innerHTML += questionHTML;
+      });
+    }
+
+    function checkAnswers() {
+      selectedQuestions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        const feedback = document.getElementById(`feedback${index}`);
+        if (selected) {
+          if (parseInt(selected.value) === q.answer) {
+            feedback.textContent = "Helyes!";
+            feedback.className = "feedback correct";
+          } else {
+            feedback.textContent = "Sajnos nem.";
+            feedback.className = "feedback incorrect";
+          }
+        } else {
+          feedback.textContent = "Kérlek, válassz egy lehetőséget.";
+          feedback.className = "feedback";
+        }
+      });
+    }
+
+    window.onload = loadQuiz;
+  </script>
+</body>
+</html>
